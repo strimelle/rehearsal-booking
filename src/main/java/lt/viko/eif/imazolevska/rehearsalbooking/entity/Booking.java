@@ -59,11 +59,11 @@ public class Booking {
      * @param endTime   the end of the rehearsal
      * @param price     the total price of the booking
      */
-    public Booking(LocalDateTime startTime, LocalDateTime endTime, BigDecimal price, BookingStatus status, Band band, Room room) {
+    public Booking(Band band, Room room, LocalDateTime startTime, LocalDateTime endTime, BigDecimal price) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.price = price;
-        this.status = status;
+        this.status = BookingStatus.ACTIVE;
         this.band = band;
         this.room = room;
     }
