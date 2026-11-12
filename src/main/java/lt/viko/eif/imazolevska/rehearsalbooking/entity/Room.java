@@ -26,6 +26,9 @@ public class Room {
     @Column(name="hourly_price")
     private BigDecimal hourlyPrice;
 
+    public Long getId() {
+        return id;
+    }
 
     public String getName() {
         return name;
