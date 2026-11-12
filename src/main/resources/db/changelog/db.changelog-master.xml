@@ -6,5 +6,8 @@
             http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
     <include file="changes/001-create-rooms-table.xml" relativeToChangelogFile="true"/>
+    <include file="changes/002-create-bands-table.xml" relativeToChangelogFile="true"/>
+    <include file="changes/003-create-bookings-table.xml" relativeToChangelogFile="true"/>
+    <include file="changes/004-insert-sample-data.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
