@@ -37,5 +37,4 @@
 | NFR-8 | API dokumentacija | API aprašytas OpenAPI 3 specifikacija, generuojama iš kodo. Swagger UI pasiekiamas adresu /swagger-ui.html, iš jo galima siųsti užklausas. | Užduoties aprašas | NFR-1 | Nėra | OpenAPI Specification | - |
 | NFR-9 | Testuojamumas | Kiekviena klasė, turinti logiką, padengta unit testais (JUnit 5, Mockito). Kiekviena vartotojo istorija turi bent vieną automatinį Cucumber end-to-end scenarijų. Visi testai paleidžiami komanda mvn test. | Užduoties aprašas | Nėra | Nėra | Cucumber Java | - |
 | NFR-10 | Kodo kokybė | Kodas vienodai suformatuotas, pavadinimai atitinka Java konvencijas, viešos klasės ir metodai turi JavaDoc komentarus, iš kurių generuojama JavaDoc dokumentacija. Kodas atitinka SOLID principus. | Užduoties aprašas | Nėra | Nėra | Nėra | - |
-| NFR-11 | Našumas | Tipinės užklausos atsakymo laikas lokalioje aplinkoje neviršija 500 ms. Tikrinama Postman įrankiu. | Sistemos kūrėjas | Nėra | Nėra | Nėra | - |
-| NFR-12 | Versijų kontrolė | Kodas saugomas GitHub. Kiekviena funkcija kuriama atskiroje šakoje ir sujungiama į master per Pull Request. | Užduoties aprašas | Nėra | Nėra | Nėra | - |
+| NFR-11 | Versijų kontrolė | Kodas saugomas GitHub. Kiekviena funkcija kuriama atskiroje šakoje ir sujungiama į master per Pull Request. | Užduoties aprašas | Nėra | Nėra | Nėra | - |
