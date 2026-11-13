@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="004-insert-sample-data" author="pavarde">
+
+        <insert tableName="rooms">
+            <column name="name" value="Didžioji salė"/>
+            <column name="capacity" valueNumeric="10"/>
+            <column name="hourly_price" valueNumeric="25.00"/>
+        </insert>
+
+        <insert tableName="rooms">
+            <column name="name" value="Mažoji studija"/>
+            <column name="capacity" valueNumeric="4"/>
+            <column name="hourly_price" valueNumeric="12.50"/>
+        </insert>
+
+        <insert tableName="bands">
+            <column name="name" value="Šiaurės vėjas"/>
+            <column name="contact_email" value="vejas@example.com"/>
+            <column name="members_count" valueNumeric="5"/>
+        </insert>
+
+        <insert tableName="bands">
+            <column name="name" value="Rūdys"/>
+            <column name="contact_email" value="rudys@example.com"/>
+            <column name="members_count" valueNumeric="3"/>
+        </insert>
+
+    </changeSet>
+
+</databaseChangeLog>
