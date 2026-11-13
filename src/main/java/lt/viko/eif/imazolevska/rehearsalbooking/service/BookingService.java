@@ -6,13 +6,16 @@ import lt.viko.eif.imazolevska.rehearsalbooking.entity.BookingStatus;
 import lt.viko.eif.imazolevska.rehearsalbooking.entity.Room;
 import lt.viko.eif.imazolevska.rehearsalbooking.exception.BusinessRuleException;
 import lt.viko.eif.imazolevska.rehearsalbooking.exception.ConflictException;
+import lt.viko.eif.imazolevska.rehearsalbooking.exception.ResourceNotFoundException;
 import lt.viko.eif.imazolevska.rehearsalbooking.repository.BookingRepository;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Book;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Business logic for bookings. All booking rules are checked here.
@@ -27,6 +30,49 @@ public class BookingService {
     private final BookingRepository bookingRepository;
     private final RoomService roomService;
     private final BandService bandService;
+
+    /**
+     * Returns all bookings.
+     *
+     * @return the list of all bookings
+     */
+    public List<Booking> getAllBookings() {
+        List<Booking> bookings = bookingRepository.findAll();
+        return bookings;
+    }
+
+    /**
+     * Finds a booking by its ID.
+     *
+     * @param id the booking ID
+     * @return the found booking
+     * @throws ResourceNotFoundException if the booking does not exist
+     */
+    public Booking getBookingById(Long id) {
+        Optional<Booking> foundBooking = bookingRepository.findById(id);
+        if (foundBooking.isEmpty()) {
+            throw new ResourceNotFoundException("Booking with id " + id + " was not found");
+        }
+        Booking booking = foundBooking.get();
+        return booking;
+    }
+
+    /**
+     * Returns active bookings of a room sorted by start time,
+     * so that bands can see which times are taken.
+     *
+     * @param roomId the room ID
+     * @return the list of active bookings
+     * @throws ResourceNotFoundException if the room does not exist
+     */
+    public List<Booking> getActiveBookingsForRoom(Long roomId) {
+        roomService.getRoomById(roomId);
+
+        List<Booking> bookings =
+                bookingRepository.findByRoomIdAndStatusOrderByStartTimeAsc(roomId, BookingStatus.ACTIVE);
+        return bookings;
+    }
+
 
     /**
      * Creates the service. Spring passes the dependencies automatically.
@@ -123,6 +169,35 @@ public class BookingService {
                 throw new ConflictException("Room is already booked at this time");
             }
         }
+    }
+
+    /**
+     * Cancels a booking. Cancelling is allowed no later than
+     * 24 hours before the booking starts (rule 6).
+     *
+     * @param id the booking ID
+     * @return the cancelled booking
+     * @throws ResourceNotFoundException if the booking does not exist
+     * @throws ConflictException         if the booking is already cancelled or it is too late
+     */
+    public Booking cancelBooking(Long id) {
+        Booking booking = getBookingById(id);
+
+        boolean active = booking.isActive();
+        if (!active) {
+            throw new ConflictException("Booking is already cancelled");
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime cancelDeadline = booking.getStartTime().minusHours(CANCEL_LIMIT_HOURS);
+        boolean tooLate = now.isAfter(cancelDeadline);
+        if (tooLate) {
+            throw new ConflictException("Booking can be cancelled no later than 24 hours before it starts");
+        }
+
+        booking.cancel();
+        Booking savedBooking = bookingRepository.save(booking);
+        return savedBooking;
     }
 
 

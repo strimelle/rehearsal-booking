@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -192,7 +193,7 @@ class BookingServiceTest {
 
     @Test
     void createBookingShouldAllowBookingRightAfterAnotherBooking() {
-        // Arrange: the room is booked from 18:00 to 20:00
+
         prepareBandAndRoom(4);
         Booking existingBooking = createBooking(tomorrowAt(18), tomorrowAt(20));
         List<Booking> activeBookings = new ArrayList<>();
@@ -200,10 +201,74 @@ class BookingServiceTest {
         when(bookingRepository.findByRoomIdAndStatusOrderByStartTimeAsc(1L, BookingStatus.ACTIVE))
                 .thenReturn(activeBookings);
 
-        // Act: book from 20:00 to 22:00
         bookingService.createBooking(1L, 1L, tomorrowAt(20), tomorrowAt(22));
 
-        // Assert: the booking is saved
+
         verify(bookingRepository).save(any(Booking.class));
+    }
+
+    @Test
+    void getBookingByIdShouldThrowExceptionWhenBookingDoesNotExist() {
+
+        when(bookingRepository.findById(99L)).thenReturn(Optional.empty());
+
+
+        try {
+            bookingService.getBookingById(99L);
+            fail("Expected ResourceNotFoundException");
+        } catch (ResourceNotFoundException exception) {
+            assertEquals("Booking with id 99 was not found", exception.getMessage());
+        }
+    }
+
+    @Test
+    void cancelBookingShouldCancelWhenMoreThan24HoursLeft() {
+
+        LocalDateTime start = LocalDateTime.now().plusDays(3);
+        Booking booking = createBooking(start, start.plusHours(2));
+        when(bookingRepository.findById(1L)).thenReturn(Optional.of(booking));
+
+        bookingService.cancelBooking(1L);
+
+
+        assertEquals(BookingStatus.CANCELLED, booking.getStatus());
+        verify(bookingRepository).save(booking);
+    }
+
+    @Test
+    void cancelBookingShouldThrowExceptionWhenLessThan24HoursLeft() {
+
+        LocalDateTime start = LocalDateTime.now().plusHours(10);
+        Booking booking = createBooking(start, start.plusHours(2));
+        when(bookingRepository.findById(1L)).thenReturn(Optional.of(booking));
+
+
+        try {
+            bookingService.cancelBooking(1L);
+            fail("Expected ConflictException");
+        } catch (ConflictException exception) {
+            assertEquals("Booking can be cancelled no later than 24 hours before it starts",
+                    exception.getMessage());
+        }
+
+
+        assertEquals(BookingStatus.ACTIVE, booking.getStatus());
+    }
+
+    @Test
+    void cancelBookingShouldThrowExceptionWhenAlreadyCancelled() {
+
+        LocalDateTime start = LocalDateTime.now().plusDays(3);
+        Booking booking = createBooking(start, start.plusHours(2));
+        booking.cancel();
+        when(bookingRepository.findById(1L)).thenReturn(Optional.of(booking));
+
+
+        try {
+            bookingService.cancelBooking(1L);
+            fail("Expected ConflictException");
+        } catch (ConflictException exception) {
+            assertEquals("Booking is already cancelled", exception.getMessage());
+        }
     }
 }
