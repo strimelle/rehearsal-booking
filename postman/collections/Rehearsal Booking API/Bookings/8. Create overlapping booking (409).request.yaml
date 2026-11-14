@@ -1,0 +1,27 @@
+$kind: http-request
+url: "{{baseUrl}}/bookings"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "bandId": {{bandId}},
+      "roomId": {{roomId}},
+      "startTime": "{{bookingDay}}T19:00:00",
+      "endTime": "{{bookingDay}}T21:00:00"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status is 409 Conflict", function () {
+          pm.response.to.have.status(409);
+      });
+
+      pm.test("Message says the room is booked", function () {
+          const error = pm.response.json();
+          pm.expect(error.message).to.include("Room is already booked at this time");
+      });
+    language: text/javascript
+order: 2000

@@ -1,0 +1,21 @@
+$kind: http-request
+url: "{{baseUrl}}/bookings/{{bookingId}}/cancel"
+method: POST
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status is 200 OK", function () {
+          pm.response.to.have.status(200);
+      });
+
+      const booking = pm.response.json();
+
+      pm.test("Booking is cancelled", function () {
+          pm.expect(booking.status).to.equal("CANCELLED");
+      });
+
+      pm.test("Cancelled booking has no cancel link", function () {
+          pm.expect(booking._links.cancel).to.equal(undefined);
+      });
+    language: text/javascript
+order: 4000

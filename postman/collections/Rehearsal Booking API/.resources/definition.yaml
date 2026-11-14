@@ -1,0 +1,9 @@
+$kind: collection
+description: Requests for the rehearsal room booking REST API. Run the whole collection with the Collection Runner.
+variables:
+  baseUrl: http://localhost:8080
+  roomName: ""
+  roomId: ""
+  bandId: ""
+  bookingId: ""
+  bookingDay: ""

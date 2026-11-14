@@ -1,0 +1,26 @@
+$kind: http-request
+url: "{{baseUrl}}/rooms"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "{{roomName}}",
+      "capacity": 8,
+      "hourlyPrice": 20.00
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status is 409 Conflict", function () {
+          pm.response.to.have.status(409);
+      });
+
+      pm.test("Message says the name is in use", function () {
+          const error = pm.response.json();
+          pm.expect(error.message).to.include("Room name is already in use");
+      });
+    language: text/javascript
+order: 3000

@@ -1,0 +1,13 @@
+# Use this workspace to collaborate
+workspace:
+  id: f0579b6d-3ac9-4126-8cd5-292b237c5638
+
+localResources:
+  specs:
+    - ../docs/openapi.yaml
+
+# Each entry here maps a local resource to one or more corresponding objects in Postman Cloud
+
+cloudResources:
+  collections:
+    ../postman/collections/Rehearsal Booking API: a9e40885-1f24-469f-9545-0226668ecbac

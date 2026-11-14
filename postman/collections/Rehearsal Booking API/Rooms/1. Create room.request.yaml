@@ -1,0 +1,34 @@
+$kind: http-request
+url: "{{baseUrl}}/rooms"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "{{roomName}}",
+      "capacity": 5,
+      "hourlyPrice": 15.00
+    }
+scripts:
+  - type: beforeRequest
+    code: |-
+      // A unique name, so that the collection can be run many times
+      const roomName = "Studija " + Date.now();
+      pm.collectionVariables.set("roomName", roomName);
+    language: text/javascript
+  - type: afterResponse
+    code: |-
+      pm.test("Status is 201 Created", function () {
+          pm.response.to.have.status(201);
+      });
+
+      pm.test("Response has a Location header", function () {
+          pm.response.to.have.header("Location");
+      });
+
+      const room = pm.response.json();
+      pm.collectionVariables.set("roomId", room.id);
+    language: text/javascript
+order: 1000

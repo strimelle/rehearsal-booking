@@ -1,0 +1,19 @@
+$kind: http-request
+url: "{{baseUrl}}/rooms"
+method: GET
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status is 200 OK", function () {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Response has an ETag header", function () {
+          pm.response.to.have.header("ETag");
+      });
+
+      pm.test("Cache-Control is no-cache", function () {
+          pm.expect(pm.response.headers.get("Cache-Control")).to.equal("no-cache");
+      });
+    language: text/javascript
+order: 2000
