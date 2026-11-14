@@ -3,6 +3,8 @@ package lt.viko.eif.imazolevska.rehearsalbooking.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.ShallowEtagHeaderFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -35,6 +37,18 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         CacheControlInterceptor cacheControlInterceptor = new CacheControlInterceptor();
         registry.addInterceptor(cacheControlInterceptor);
+    }
+
+    /**
+     * Allows Swagger Editor (editor.swagger.io) to send requests to this API from the browser.
+     *
+     * @param registry the CORS settings used by Spring
+     */
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        CorsRegistration registration = registry.addMapping("/**");
+        registration.allowedOrigins("https://editor.swagger.io");
+        registration.allowedMethods("GET", "POST", "PUT", "DELETE");
     }
 }
 
