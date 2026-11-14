@@ -1,5 +1,7 @@
 package lt.viko.eif.imazolevska.rehearsalbooking.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lt.viko.eif.imazolevska.rehearsalbooking.dto.BookingRequest;
 import lt.viko.eif.imazolevska.rehearsalbooking.dto.BookingResponse;
@@ -29,6 +31,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
  */
 @RestController
 @RequestMapping("/bookings")
+@Tag(name = "Bookings", description = "Room bookings")
 public class BookingController {
 
     private final BookingService bookingService;
@@ -52,6 +55,7 @@ public class BookingController {
      * @return the booking with status 200
      */
     @GetMapping("/{id}")
+    @Operation(summary = "See a booking")
     public ResponseEntity<BookingResponse> getBookingById(@PathVariable("id") Long id) {
         Booking booking = bookingService.getBookingById(id);
         BookingResponse response = bookingResponseMapper.toResponse(booking);
@@ -64,6 +68,7 @@ public class BookingController {
      * @return the list of bookings with a link to itself
      */
     @GetMapping
+    @Operation(summary = "See all bookings")
     public CollectionModel<BookingResponse> getAllBookings() {
         List<Booking> bookings = bookingService.getAllBookings();
 
@@ -85,6 +90,7 @@ public class BookingController {
      * @return the created booking with status 201 and a Location header
      */
     @PostMapping
+    @Operation(summary = "Book a room")
     public ResponseEntity<BookingResponse> createBooking(@Valid @RequestBody BookingRequest request) {
         Booking booking = bookingService.createBooking(request.getBandId(), request.getRoomId(),
                 request.getStartTime(), request.getEndTime());
@@ -101,6 +107,7 @@ public class BookingController {
      * @return the cancelled booking with status 200
      */
     @PostMapping("/{id}/cancel")
+    @Operation(summary = "Cancel booking")
     public ResponseEntity<BookingResponse> cancelBooking(@PathVariable("id") Long id) {
         Booking booking = bookingService.cancelBooking(id);
         BookingResponse response = bookingResponseMapper.toResponse(booking);

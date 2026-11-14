@@ -1,5 +1,7 @@
 package lt.viko.eif.imazolevska.rehearsalbooking.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lt.viko.eif.imazolevska.rehearsalbooking.dto.BandRequest;
 import lt.viko.eif.imazolevska.rehearsalbooking.dto.BandResponse;
@@ -31,6 +33,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
  */
 @RestController
 @RequestMapping("/bands")
+@Tag(name = "Bands", description = "Music bands")
 public class BandController {
 
     private final BandService bandService;
@@ -54,6 +57,7 @@ public class BandController {
      * @return the band with status 200
      */
     @GetMapping("/{id}")
+    @Operation(summary = "See a band")
     public ResponseEntity<BandResponse> getBandById(@PathVariable("id") Long id) {
         Band band = bandService.getBandById(id);
         BandResponse response = bandResponseMapper.toResponse(band);
@@ -66,6 +70,7 @@ public class BandController {
      * @return the list of bands with a link to itself
      */
     @GetMapping
+    @Operation(summary = "See all bands")
     public CollectionModel<BandResponse> getAllBands() {
         List<Band> bands = bandService.getAllBands();
 
@@ -87,6 +92,7 @@ public class BandController {
      * @return the created band with status 201 and a Location header
      */
     @PostMapping
+    @Operation(summary = "Create band")
     public ResponseEntity<BandResponse> createBand(@Valid @RequestBody BandRequest request) {
         Band band = bandService.createBand(request.getName(), request.getContactEmail(), request.getMembersCount());
         BandResponse response = bandResponseMapper.toResponse(band);
@@ -103,6 +109,7 @@ public class BandController {
      * @return the changed band with status 200
      */
     @PutMapping("/{id}")
+    @Operation(summary = "Update band")
     public ResponseEntity<BandResponse> updateBand(@PathVariable("id") Long id,
                                                    @Valid @RequestBody BandRequest request) {
         Band band = bandService.updateBand(id, request.getName(), request.getContactEmail(),
@@ -118,6 +125,7 @@ public class BandController {
      * @return an empty response with status 204
      */
     @DeleteMapping("/{id}")
+    @Operation(summary = "Delete band")
     public ResponseEntity<Void> deleteBand(@PathVariable("id") Long id) {
         bandService.deleteBand(id);
         return ResponseEntity.noContent().build();
