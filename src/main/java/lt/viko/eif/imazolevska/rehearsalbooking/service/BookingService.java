@@ -176,16 +176,16 @@ public class BookingService {
      * 24 hours before the booking starts (rule 6).
      *
      * @param id the booking ID
-     * @return the cancelled booking
+     * @return the canceled booking
      * @throws ResourceNotFoundException if the booking does not exist
-     * @throws ConflictException         if the booking is already cancelled or it is too late
+     * @throws ConflictException         if the booking is already canceled or it is too late
      */
     public Booking cancelBooking(Long id) {
         Booking booking = getBookingById(id);
 
         boolean active = booking.isActive();
         if (!active) {
-            throw new ConflictException("Booking is already cancelled");
+            throw new ConflictException("Booking is already canceled");
         }
 
         LocalDateTime now = LocalDateTime.now();

@@ -1,0 +1,24 @@
+$kind: http-request
+url: "{{baseUrl}}/rooms/{{roomId}}"
+method: PUT
+body:
+  type: json
+  content: |-
+    {
+        "name": "{{roomName}}",
+        "capacity": 5,
+        "hourlyPrice"; 20.00
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status code is 200", function () {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Price is changed to 20", function (){
+          const room = pm.response.json();
+          pm.expect(room.hourlyPrice).to.equal(20);
+      })
+    language: text/javascript
+order: 6000

@@ -1,5 +1,7 @@
 package lt.viko.eif.imazolevska.rehearsalbooking.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lt.viko.eif.imazolevska.rehearsalbooking.dto.BookingResponse;
 import lt.viko.eif.imazolevska.rehearsalbooking.dto.RoomRequest;
@@ -28,6 +30,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
  */
 @RestController
 @RequestMapping("/rooms")
+@Tag(name = "Rooms", description = "Rehearsal rooms and their bookings")
 public class RoomController {
 
     private final RoomService roomService;
@@ -37,7 +40,7 @@ public class RoomController {
 
     /**
      * Creates the controller. Spring passes the dependencies automatically.
-     *
+     *@Tag(name = "Rooms", description = "Rehearsal rooms and their bo
      * @param roomService        the service for rooms
      * @param roomResponseMapper the mapper that creates responses
      */
@@ -55,6 +58,7 @@ public class RoomController {
      * @return the room with status 200
      */
     @GetMapping("/{id}")
+    @Operation(summary = "See a room")
     public ResponseEntity<RoomResponse> getRoomById(@PathVariable("id") Long id) {
         Room room = roomService.getRoomById(id);
         RoomResponse response = roomResponseMapper.toResponse(room);
@@ -68,6 +72,7 @@ public class RoomController {
      * @return the list of active bookings with links to itself and to the room
      */
     @GetMapping("/{id}/bookings")
+    @Operation(summary = "See all bookings")
     public CollectionModel<BookingResponse> getRoomBookings(@PathVariable("id") Long id) {
         List<Booking> bookings = bookingService.getActiveBookingsForRoom(id);
 
@@ -89,6 +94,7 @@ public class RoomController {
      * @return the list of rooms with a link to itself
      */
     @GetMapping
+    @Operation(summary = "See all rooms")
     public CollectionModel<RoomResponse> getAllRooms() {
         List<Room> rooms = roomService.getAllRooms();
 
@@ -110,6 +116,7 @@ public class RoomController {
      * @return the created room with status 201 and a Location header
      */
     @PostMapping
+    @Operation(summary = "Create room")
     public ResponseEntity<RoomResponse> createRoom(@Valid @RequestBody RoomRequest request){
         Room room=roomService.createRoom(request.getName(),request.getCapacity(), request.getHourlyPrice());
         RoomResponse response=roomResponseMapper.toResponse(room);
@@ -126,6 +133,7 @@ public class RoomController {
      * @return the changed room with status 200
      */
     @PutMapping("/{id}")
+    @Operation(summary = "Update room")
     public ResponseEntity<RoomResponse> updateRoom(@PathVariable("id") Long id, @Valid @RequestBody RoomRequest request){
         Room room=roomService.updateRoom(id, request.getName(), request.getCapacity(), request.getHourlyPrice());
         RoomResponse response = roomResponseMapper.toResponse(room);
@@ -140,6 +148,7 @@ public class RoomController {
      * @return an empty response with status 204
      */
     @DeleteMapping("/{id}")
+    @Operation(summary = "Delete room")
     public ResponseEntity<Void> deleteRoom(@PathVariable("id") Long id){
         roomService.deleteRoom(id);
         return ResponseEntity.noContent().build();

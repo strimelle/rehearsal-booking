@@ -1,0 +1,42 @@
+$kind: http-request
+url: "{{baseUrl}}/bookings"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "bandId": {{bandId}},
+      "roomId": {{roomId}},
+      "startTime": "{{bookingDay}}T18:00:00",
+      "endTime": "{{bookingDay}}T20:00:00"
+    }
+scripts:
+  - type: beforeRequest
+    code: |-
+      // The booking day is always 3 days from today
+      const day = new Date();
+      day.setDate(day.getDate() + 3);
+      const bookingDay = day.toISOString().substring(0, 10);
+      pm.collectionVariables.set("bookingDay", bookingDay);
+    language: text/javascript
+  - type: afterResponse
+    code: |-
+      pm.test("Status is 201 Created", function () {
+          pm.response.to.have.status(201);
+      });
+
+      const booking = pm.response.json();
+      pm.collectionVariables.set("bookingId", booking.id);
+
+      pm.test("Booking is active and costs 30.00", function () {
+          pm.expect(booking.status).to.equal("ACTIVE");
+          pm.expect(booking.price).to.equal(30);
+      });
+
+      pm.test("Active booking has a cancel link", function () {
+          pm.expect(booking._links.cancel).to.not.equal(undefined);
+      });
+    language: text/javascript
+order: 1000

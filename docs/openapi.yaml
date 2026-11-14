@@ -1,0 +1,465 @@
+openapi: 3.1.0
+info:
+  title: Rehearsal Room Booking API
+  description: REST API for booking rehearsal rooms for music bands.
+  version: "1.0"
+servers:
+- url: http://localhost:8080
+  description: Generated server url
+tags:
+- name: Bookings
+  description: Room bookings
+- name: Rooms
+  description: Rehearsal rooms and their bookings
+- name: Bands
+  description: Music bands
+paths:
+  /rooms/{id}:
+    get:
+      tags:
+      - Rooms
+      summary: See a room
+      operationId: getRoomById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/RoomResponse"
+    put:
+      tags:
+      - Rooms
+      summary: Update room
+      operationId: updateRoom
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RoomRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/RoomResponse"
+    delete:
+      tags:
+      - Rooms
+      summary: Delete room
+      operationId: deleteRoom
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+  /bands/{id}:
+    get:
+      tags:
+      - Bands
+      summary: See a band
+      operationId: getBandById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/BandResponse"
+    put:
+      tags:
+      - Bands
+      summary: Update band
+      operationId: updateBand
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BandRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/BandResponse"
+    delete:
+      tags:
+      - Bands
+      summary: Delete band
+      operationId: deleteBand
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+  /rooms:
+    get:
+      tags:
+      - Rooms
+      summary: See all rooms
+      operationId: getAllRooms
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CollectionModelRoomResponse"
+    post:
+      tags:
+      - Rooms
+      summary: Create room
+      operationId: createRoom
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RoomRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/RoomResponse"
+  /bookings:
+    get:
+      tags:
+      - Bookings
+      summary: See all bookings
+      operationId: getAllBookings
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CollectionModelBookingResponse"
+    post:
+      tags:
+      - Bookings
+      summary: Book a room
+      operationId: createBooking
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BookingRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/BookingResponse"
+  /bookings/{id}/cancel:
+    post:
+      tags:
+      - Bookings
+      summary: Cancel booking
+      operationId: cancelBooking
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/BookingResponse"
+  /bands:
+    get:
+      tags:
+      - Bands
+      summary: See all bands
+      operationId: getAllBands
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CollectionModelBandResponse"
+    post:
+      tags:
+      - Bands
+      summary: Create band
+      operationId: createBand
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BandRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/BandResponse"
+  /rooms/{id}/bookings:
+    get:
+      tags:
+      - Rooms
+      summary: See all bookings
+      operationId: getRoomBookings
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CollectionModelBookingResponse"
+  /bookings/{id}:
+    get:
+      tags:
+      - Bookings
+      summary: See a booking
+      operationId: getBookingById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/BookingResponse"
+components:
+  schemas:
+    RoomRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 100
+          minLength: 0
+        capacity:
+          type: integer
+          format: int32
+          minimum: 1
+        hourlyPrice:
+          type: number
+          minimum: 0
+      required:
+      - capacity
+      - hourlyPrice
+      - name
+    RoomResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        capacity:
+          type: integer
+          format: int32
+        hourlyPrice:
+          type: number
+        _links:
+          $ref: "#/components/schemas/Links"
+    BandRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 100
+          minLength: 0
+        contactEmail:
+          type: string
+          format: email
+          minLength: 1
+        membersCount:
+          type: integer
+          format: int32
+          minimum: 1
+      required:
+      - contactEmail
+      - membersCount
+      - name
+    BandResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        contactEmail:
+          type: string
+        membersCount:
+          type: integer
+          format: int32
+        _links:
+          $ref: "#/components/schemas/Links"
+    BookingRequest:
+      type: object
+      properties:
+        bandId:
+          type: integer
+          format: int64
+        roomId:
+          type: integer
+          format: int64
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+      required:
+      - bandId
+      - endTime
+      - roomId
+      - startTime
+    BookingResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        bandId:
+          type: integer
+          format: int64
+        bandName:
+          type: string
+        roomId:
+          type: integer
+          format: int64
+        roomName:
+          type: string
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        status:
+          type: string
+        price:
+          type: number
+        _links:
+          $ref: "#/components/schemas/Links"
+    CollectionModelRoomResponse:
+      type: object
+      properties:
+        _embedded:
+          type: object
+          properties:
+            rooms:
+              type: array
+              items:
+                $ref: "#/components/schemas/RoomResponse"
+        _links:
+          $ref: "#/components/schemas/Links"
+    CollectionModelBookingResponse:
+      type: object
+      properties:
+        _embedded:
+          type: object
+          properties:
+            bookings:
+              type: array
+              items:
+                $ref: "#/components/schemas/BookingResponse"
+        _links:
+          $ref: "#/components/schemas/Links"
+    CollectionModelBandResponse:
+      type: object
+      properties:
+        _embedded:
+          type: object
+          properties:
+            bands:
+              type: array
+              items:
+                $ref: "#/components/schemas/BandResponse"
+        _links:
+          $ref: "#/components/schemas/Links"
+    Link:
+      type: object
+      properties:
+        href:
+          type: string
+        hreflang:
+          type: string
+        title:
+          type: string
+        type:
+          type: string
+        deprecation:
+          type: string
+        profile:
+          type: string
+        name:
+          type: string
+        templated:
+          type: boolean
+    Links:
+      type: object
+      additionalProperties:
+        $ref: "#/components/schemas/Link"

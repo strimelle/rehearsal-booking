@@ -1,0 +1,24 @@
+$kind: http-request
+url: "{{baseUrl}}/bands"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Vakaro Aidas",
+      "contactEmail": "aidas@example.com",
+      "membersCount": 4
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status is 201 Created", function () {
+          pm.response.to.have.status(201);
+      });
+
+      const band = pm.response.json();
+      pm.collectionVariables.set("bandId", band.id);
+    language: text/javascript
+order: 1000
