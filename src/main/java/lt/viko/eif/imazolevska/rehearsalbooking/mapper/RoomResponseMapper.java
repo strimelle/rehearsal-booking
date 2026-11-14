@@ -26,9 +26,12 @@ public class RoomResponseMapper {
 
         Link selfLink=linkTo(methodOn(RoomController.class).getRoomById(room.getId())).withSelfRel();
         Link allRoomsLink=linkTo(methodOn(RoomController.class).getAllRooms()).withRel("rooms");
+        Link bookingsLink = linkTo(methodOn(RoomController.class).getRoomBookings(room.getId())).withRel("bookings");
+
 
         response.add(selfLink);
         response.add(allRoomsLink);
+        response.add(bookingsLink);
         return response;
     }
 

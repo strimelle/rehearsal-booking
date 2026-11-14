@@ -1,10 +1,14 @@
 package lt.viko.eif.imazolevska.rehearsalbooking.controller;
 
 import jakarta.validation.Valid;
+import lt.viko.eif.imazolevska.rehearsalbooking.dto.BookingResponse;
 import lt.viko.eif.imazolevska.rehearsalbooking.dto.RoomRequest;
 import lt.viko.eif.imazolevska.rehearsalbooking.dto.RoomResponse;
+import lt.viko.eif.imazolevska.rehearsalbooking.entity.Booking;
 import lt.viko.eif.imazolevska.rehearsalbooking.entity.Room;
+import lt.viko.eif.imazolevska.rehearsalbooking.mapper.BookingResponseMapper;
 import lt.viko.eif.imazolevska.rehearsalbooking.mapper.RoomResponseMapper;
+import lt.viko.eif.imazolevska.rehearsalbooking.service.BookingService;
 import lt.viko.eif.imazolevska.rehearsalbooking.service.RoomService;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.IanaLinkRelations;
@@ -28,6 +32,8 @@ public class RoomController {
 
     private final RoomService roomService;
     private final RoomResponseMapper roomResponseMapper;
+    private final BookingService bookingService;
+    private final BookingResponseMapper bookingResponseMapper;
 
     /**
      * Creates the controller. Spring passes the dependencies automatically.
@@ -35,9 +41,11 @@ public class RoomController {
      * @param roomService        the service for rooms
      * @param roomResponseMapper the mapper that creates responses
      */
-    public RoomController(RoomService roomService, RoomResponseMapper roomResponseMapper) {
+    public RoomController(RoomService roomService, RoomResponseMapper roomResponseMapper, BookingService bookingService, BookingResponseMapper bookingResponseMapper) {
         this.roomResponseMapper = roomResponseMapper;
         this.roomService = roomService;
+        this.bookingService=bookingService;
+        this.bookingResponseMapper=bookingResponseMapper;
     }
 
     /**
@@ -51,6 +59,28 @@ public class RoomController {
         Room room = roomService.getRoomById(id);
         RoomResponse response = roomResponseMapper.toResponse(room);
         return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Returns active bookings of a room, so that bands can see which times are taken.
+     *
+     * @param id the room ID from the URL
+     * @return the list of active bookings with links to itself and to the room
+     */
+    @GetMapping("/{id}/bookings")
+    public CollectionModel<BookingResponse> getRoomBookings(@PathVariable("id") Long id) {
+        List<Booking> bookings = bookingService.getActiveBookingsForRoom(id);
+
+        List<BookingResponse> responses = new ArrayList<>();
+        for (Booking booking : bookings) {
+            BookingResponse response = bookingResponseMapper.toResponse(booking);
+            responses.add(response);
+        }
+
+        Link selfLink = linkTo(methodOn(RoomController.class).getRoomBookings(id)).withSelfRel();
+        Link roomLink = linkTo(methodOn(RoomController.class).getRoomById(id)).withRel("room");
+        CollectionModel<BookingResponse> collection = CollectionModel.of(responses, selfLink, roomLink);
+        return collection;
     }
 
     /**
