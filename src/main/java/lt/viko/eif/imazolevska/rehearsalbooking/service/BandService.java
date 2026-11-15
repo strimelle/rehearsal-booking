@@ -1,22 +1,23 @@
 package lt.viko.eif.imazolevska.rehearsalbooking.service;
 
-import org.springframework.transaction.annotation.Transactional;
 import lt.viko.eif.imazolevska.rehearsalbooking.entity.Band;
 import lt.viko.eif.imazolevska.rehearsalbooking.entity.Booking;
 import lt.viko.eif.imazolevska.rehearsalbooking.exception.ResourceNotFoundException;
 import lt.viko.eif.imazolevska.rehearsalbooking.repository.BandRepository;
 import lt.viko.eif.imazolevska.rehearsalbooking.repository.BookingRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Business logic for music bands.
+ */
 @Service
 public class BandService {
 
-    /**
-     * Business logic for music bands.
-     */
+
     private final BandRepository bandRepository;
     private final BookingRepository bookingRepository;
 

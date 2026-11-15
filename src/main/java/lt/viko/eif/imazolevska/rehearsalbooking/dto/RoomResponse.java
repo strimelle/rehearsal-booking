@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 /**
  * Room data that the API returns, together with HATEOAS links.
  */
-@Relation(collectionRelation="rooms", itemRelation="room")
+@Relation(collectionRelation = "rooms", itemRelation = "room")
 public class RoomResponse extends RepresentationModel<RoomResponse> {
     private final Long id;
     private final String name;
@@ -23,11 +23,11 @@ public class RoomResponse extends RepresentationModel<RoomResponse> {
      * @param capacity    how many people fit in the room
      * @param hourlyPrice the price of one hour
      */
-    public RoomResponse(Long id, String name, int capacity, BigDecimal hourlyPrice){
-        this.id=id;
-        this.name=name;
-        this.capacity=capacity;
-        this.hourlyPrice=hourlyPrice;
+    public RoomResponse(Long id, String name, int capacity, BigDecimal hourlyPrice) {
+        this.id = id;
+        this.name = name;
+        this.capacity = capacity;
+        this.hourlyPrice = hourlyPrice;
     }
 
     public Long getId() {

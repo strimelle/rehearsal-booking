@@ -40,15 +40,15 @@ public class RoomController {
 
     /**
      * Creates the controller. Spring passes the dependencies automatically.
-     *@Tag(name = "Rooms", description = "Rehearsal rooms and their bo
+     *
      * @param roomService        the service for rooms
      * @param roomResponseMapper the mapper that creates responses
      */
     public RoomController(RoomService roomService, RoomResponseMapper roomResponseMapper, BookingService bookingService, BookingResponseMapper bookingResponseMapper) {
         this.roomResponseMapper = roomResponseMapper;
         this.roomService = roomService;
-        this.bookingService=bookingService;
-        this.bookingResponseMapper=bookingResponseMapper;
+        this.bookingService = bookingService;
+        this.bookingResponseMapper = bookingResponseMapper;
     }
 
     /**
@@ -117,11 +117,11 @@ public class RoomController {
      */
     @PostMapping
     @Operation(summary = "Create room")
-    public ResponseEntity<RoomResponse> createRoom(@Valid @RequestBody RoomRequest request){
-        Room room=roomService.createRoom(request.getName(),request.getCapacity(), request.getHourlyPrice());
-        RoomResponse response=roomResponseMapper.toResponse(room);
+    public ResponseEntity<RoomResponse> createRoom(@Valid @RequestBody RoomRequest request) {
+        Room room = roomService.createRoom(request.getName(), request.getCapacity(), request.getHourlyPrice());
+        RoomResponse response = roomResponseMapper.toResponse(room);
 
-        URI location=response.getRequiredLink(IanaLinkRelations.SELF).toUri();
+        URI location = response.getRequiredLink(IanaLinkRelations.SELF).toUri();
         return ResponseEntity.created(location).body(response);
     }
 
@@ -134,8 +134,8 @@ public class RoomController {
      */
     @PutMapping("/{id}")
     @Operation(summary = "Update room")
-    public ResponseEntity<RoomResponse> updateRoom(@PathVariable("id") Long id, @Valid @RequestBody RoomRequest request){
-        Room room=roomService.updateRoom(id, request.getName(), request.getCapacity(), request.getHourlyPrice());
+    public ResponseEntity<RoomResponse> updateRoom(@PathVariable("id") Long id, @Valid @RequestBody RoomRequest request) {
+        Room room = roomService.updateRoom(id, request.getName(), request.getCapacity(), request.getHourlyPrice());
         RoomResponse response = roomResponseMapper.toResponse(room);
         return ResponseEntity.ok(response);
 
@@ -149,7 +149,7 @@ public class RoomController {
      */
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete room")
-    public ResponseEntity<Void> deleteRoom(@PathVariable("id") Long id){
+    public ResponseEntity<Void> deleteRoom(@PathVariable("id") Long id) {
         roomService.deleteRoom(id);
         return ResponseEntity.noContent().build();
     }

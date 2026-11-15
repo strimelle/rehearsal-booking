@@ -17,30 +17,30 @@ import java.time.LocalDateTime;
 public class Booking {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @Column(name="id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @Column(name="start_time")
+    @Column(name = "start_time")
     private LocalDateTime startTime;
 
-    @Column(name="end_time")
+    @Column(name = "end_time")
     private LocalDateTime endTime;
 
-    @Column(name="price")
+    @Column(name = "price")
     private BigDecimal price;
 
     @ManyToOne
-    @JoinColumn(name="band_id")
+    @JoinColumn(name = "band_id")
     private Band band;
 
     @ManyToOne
-    @JoinColumn(name="room_id")
+    @JoinColumn(name = "room_id")
     private Room room;
 
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.VARCHAR)
-    @Column(name="status")
+    @Column(name = "status")
     private BookingStatus status;
 
     /**
@@ -100,7 +100,7 @@ public class Booking {
      * Marks the booking as canceled.
      * Whether cancelling is allowed (the 24-hour rule) is checked by the service layer.
      */
-    public void cancel(){
+    public void cancel() {
         this.status = BookingStatus.CANCELLED;
     }
 
@@ -110,8 +110,8 @@ public class Booking {
      *
      * @return true if the booking is active, false if it is canceled
      */
-    public boolean isActive(){
-        if (status == BookingStatus.ACTIVE){
+    public boolean isActive() {
+        if (status == BookingStatus.ACTIVE) {
             return true;
         }
         return false;

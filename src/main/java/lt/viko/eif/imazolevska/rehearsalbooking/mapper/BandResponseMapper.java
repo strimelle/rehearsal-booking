@@ -17,7 +17,8 @@ public class BandResponseMapper {
 
     /**
      * Converts a band to a response with links.
-     pavarde.     *
+     * *
+     *
      * @param band the band entity
      * @return the response for the API
      */
