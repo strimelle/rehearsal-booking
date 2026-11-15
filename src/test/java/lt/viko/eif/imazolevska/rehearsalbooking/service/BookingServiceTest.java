@@ -1,9 +1,12 @@
-package lt.viko.eif.imazolevska.rehearsalbooking.exception;
+package lt.viko.eif.imazolevska.rehearsalbooking.service;
 
 import lt.viko.eif.imazolevska.rehearsalbooking.entity.Band;
 import lt.viko.eif.imazolevska.rehearsalbooking.entity.Booking;
 import lt.viko.eif.imazolevska.rehearsalbooking.entity.BookingStatus;
 import lt.viko.eif.imazolevska.rehearsalbooking.entity.Room;
+import lt.viko.eif.imazolevska.rehearsalbooking.exception.BusinessRuleException;
+import lt.viko.eif.imazolevska.rehearsalbooking.exception.ConflictException;
+import lt.viko.eif.imazolevska.rehearsalbooking.exception.ResourceNotFoundException;
 import lt.viko.eif.imazolevska.rehearsalbooking.repository.BookingRepository;
 import lt.viko.eif.imazolevska.rehearsalbooking.service.BandService;
 import lt.viko.eif.imazolevska.rehearsalbooking.service.BookingService;
@@ -256,7 +259,7 @@ class BookingServiceTest {
     }
 
     @Test
-    void cancelBookingShouldThrowExceptionWhenAlreadyCancelled() {
+    void cancelBookingShouldThrowExceptionWhenAlreadyCanceled() {
 
         LocalDateTime start = LocalDateTime.now().plusDays(3);
         Booking booking = createBooking(start, start.plusHours(2));
@@ -268,7 +271,7 @@ class BookingServiceTest {
             bookingService.cancelBooking(1L);
             fail("Expected ConflictException");
         } catch (ConflictException exception) {
-            assertEquals("Booking is already cancelled", exception.getMessage());
+            assertEquals("Booking is already canceled", exception.getMessage());
         }
     }
 }
