@@ -10,7 +10,6 @@ import lt.viko.eif.imazolevska.rehearsalbooking.exception.ResourceNotFoundExcept
 import lt.viko.eif.imazolevska.rehearsalbooking.repository.BookingRepository;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Book;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -82,7 +81,7 @@ public class BookingService {
      * @param bandService       the service for bands
      */
     public BookingService(BookingRepository bookingRepository, RoomService roomService, BandService bandService) {
-        this.bookingRepository =bookingRepository;
+        this.bookingRepository = bookingRepository;
         this.roomService = roomService;
         this.bandService = bandService;
     }
@@ -97,7 +96,7 @@ public class BookingService {
      * @return the saved booking
      */
 
-    public Booking createBooking(Long bandId, Long roomId, LocalDateTime startTime, LocalDateTime endTime){
+    public Booking createBooking(Long bandId, Long roomId, LocalDateTime startTime, LocalDateTime endTime) {
         Band band = bandService.getBandById(bandId);
         Room room = roomService.getRoomById(roomId);
 
@@ -115,7 +114,7 @@ public class BookingService {
     /**
      * Calculates the price
      */
-    private BigDecimal calculatePrice(Room room, LocalDateTime startTime, LocalDateTime endTime){
+    private BigDecimal calculatePrice(Room room, LocalDateTime startTime, LocalDateTime endTime) {
         Duration duration = Duration.between(startTime, endTime);
         long hours = duration.toHours();
         BigDecimal hoursAsNumber = BigDecimal.valueOf(hours);
@@ -126,46 +125,46 @@ public class BookingService {
     /**
      * Checks the booking times
      */
-    private void checkTimes(LocalDateTime startTime, LocalDateTime endTime){
+    private void checkTimes(LocalDateTime startTime, LocalDateTime endTime) {
         boolean endIsAfterStart = endTime.isAfter(startTime);
-        if(!endIsAfterStart){
+        if (!endIsAfterStart) {
             throw new BusinessRuleException("End time must be after start time");
         }
 
-        LocalDateTime now =LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now();
         boolean startIsInPast = startTime.isBefore(now);
-        if(startIsInPast){
+        if (startIsInPast) {
             throw new BusinessRuleException("Booking cannot be made in the past");
         }
 
         Duration duration = Duration.between(startTime, endTime);
         long minutes = duration.toMinutes();
         long minutesOverFullHour = minutes % 60;
-        if(minutesOverFullHour != 0){
+        if (minutesOverFullHour != 0) {
             throw new BusinessRuleException("Booking must last a whole number of hours");
         }
 
         long hours = minutes / 60;
-        if(hours < MIN_HOURS || hours > MAX_HOURS) {
+        if (hours < MIN_HOURS || hours > MAX_HOURS) {
             throw new BusinessRuleException("Booking must last from 1 to 3 hours");
         }
     }
 
-    private void checkCapacity(Band band, Room room){
+    private void checkCapacity(Band band, Room room) {
         int membersCount = band.getMembersCount();
         int capacity = room.getCapacity();
-        if (membersCount > capacity){
+        if (membersCount > capacity) {
             throw new BusinessRuleException("Band has more members than the room capacity");
         }
     }
 
     private void checkRoomIsFree(Long roomId, LocalDateTime startTime, LocalDateTime endTime) {
-        List<Booking> activeBookings =bookingRepository.findByRoomIdAndStatusOrderByStartTimeAsc(roomId, BookingStatus.ACTIVE);
+        List<Booking> activeBookings = bookingRepository.findByRoomIdAndStatusOrderByStartTimeAsc(roomId, BookingStatus.ACTIVE);
 
         for (Booking otherBooking : activeBookings) {
             boolean startsBeforeOtherEnds = startTime.isBefore(otherBooking.getEndTime());
             boolean endsAfterOtherStarts = endTime.isAfter(otherBooking.getStartTime());
-            if(startsBeforeOtherEnds && endsAfterOtherStarts){
+            if (startsBeforeOtherEnds && endsAfterOtherStarts) {
                 throw new ConflictException("Room is already booked at this time");
             }
         }

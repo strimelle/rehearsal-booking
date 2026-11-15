@@ -8,7 +8,7 @@ import java.math.BigDecimal;
  * Data that the client sends to create or change a room.
  */
 public class RoomRequest {
-    @NotBlank(message = "Name ir required")
+    @NotBlank(message = "Name is required")
     @Size(max = 100, message = "Name must be at most 100 characters")
     private String name;
 
@@ -16,7 +16,7 @@ public class RoomRequest {
     @Min(value = 1, message = "Capacity must be at least 1")
     private Integer capacity;
 
-    @NotNull(message = "Hourly price ir required")
+    @NotNull(message = "Hourly price is required")
     @Positive(message = "Hourly price must be greater than 0")
     private BigDecimal hourlyPrice;
 

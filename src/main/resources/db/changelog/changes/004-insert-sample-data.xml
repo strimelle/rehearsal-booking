@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
             http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="004-insert-sample-data" author="pavarde">
+    <changeSet id="004-insert-sample-data" author="imazolevska">
 
         <insert tableName="rooms">
             <column name="name" value="Didžioji salė"/>

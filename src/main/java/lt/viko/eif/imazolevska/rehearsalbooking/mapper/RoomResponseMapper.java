@@ -21,11 +21,11 @@ public class RoomResponseMapper {
      * @param room the room entity
      * @return the response for the API
      */
-    public RoomResponse toResponse(Room room){
-        RoomResponse response=new RoomResponse(room.getId(), room.getName(), room.getCapacity(), room.getHourlyPrice());
+    public RoomResponse toResponse(Room room) {
+        RoomResponse response = new RoomResponse(room.getId(), room.getName(), room.getCapacity(), room.getHourlyPrice());
 
-        Link selfLink=linkTo(methodOn(RoomController.class).getRoomById(room.getId())).withSelfRel();
-        Link allRoomsLink=linkTo(methodOn(RoomController.class).getAllRooms()).withRel("rooms");
+        Link selfLink = linkTo(methodOn(RoomController.class).getRoomById(room.getId())).withSelfRel();
+        Link allRoomsLink = linkTo(methodOn(RoomController.class).getAllRooms()).withRel("rooms");
         Link bookingsLink = linkTo(methodOn(RoomController.class).getRoomBookings(room.getId())).withRel("bookings");
 
 
@@ -34,7 +34,6 @@ public class RoomResponseMapper {
         response.add(bookingsLink);
         return response;
     }
-
 
 
 }

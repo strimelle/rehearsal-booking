@@ -9,21 +9,21 @@ import java.math.BigDecimal;
  * Mapped to the "rooms" database table.
  */
 @Entity
-@Table(name="rooms")
+@Table(name = "rooms")
 public class Room {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
+    @Column(name = "id")
     private Long id;
 
-    @Column(name="name")
+    @Column(name = "name")
     private String name;
 
-    @Column(name="capacity")
+    @Column(name = "capacity")
     private int capacity;
 
-    @Column(name="hourly_price")
+    @Column(name = "hourly_price")
     private BigDecimal hourlyPrice;
 
     public Long getId() {
@@ -71,7 +71,7 @@ public class Room {
      */
     public Room(String name, int capacity, BigDecimal hourlyPrice) {
         this.name = name;
-        this.capacity =capacity;
+        this.capacity = capacity;
         this.hourlyPrice = hourlyPrice;
 
     }

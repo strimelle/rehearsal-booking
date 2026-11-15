@@ -10,7 +10,7 @@ scripts:
 
       pm.test("Message says the booking is already cancelled", function () {
           const error = pm.response.json();
-          pm.expect(error.message).to.equal("Booking is already cancelled");
+          pm.expect(error.message).to.equal("Booking is already canceled");
       });
     language: text/javascript
 order: 5000

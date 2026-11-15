@@ -43,7 +43,7 @@ public class RoomService {
     public Room getRoomById(Long id) {
         Optional<Room> foundRoom = roomRepository.findById(id);
 
-        if(foundRoom.isEmpty()){
+        if (foundRoom.isEmpty()) {
             throw new ResourceNotFoundException("Room with id " + id + " was not found");
         }
         Room room = foundRoom.get();
@@ -55,7 +55,7 @@ public class RoomService {
      *
      * @return the list of all rooms
      */
-    public List<Room> getAllRooms(){
+    public List<Room> getAllRooms() {
         List<Room> rooms = roomRepository.findAll();
         return rooms;
     }
@@ -69,15 +69,15 @@ public class RoomService {
      * @return the saved room with its ID
      * @throws ConflictException if the room name is already in use
      */
-    public Room createRoom(String name, int capacity, BigDecimal hourlyPrice){
+    public Room createRoom(String name, int capacity, BigDecimal hourlyPrice) {
 
         boolean nameTaken = roomRepository.existsByName(name);
-        if(nameTaken){
+        if (nameTaken) {
             throw new ConflictException("Room name is already in use: " + name);
         }
         Room room = new Room(name, capacity, hourlyPrice);
-        Room savedRoom =roomRepository.save(room);
-        return  savedRoom;
+        Room savedRoom = roomRepository.save(room);
+        return savedRoom;
     }
 
     /**
@@ -97,7 +97,7 @@ public class RoomService {
         boolean sameName = room.getName().equals(name);
         if (!sameName) {
             boolean nameTaken = roomRepository.existsByName(name);
-            if(nameTaken){
+            if (nameTaken) {
                 throw new ConflictException("Room name is already in use: " + name);
             }
         }
@@ -120,14 +120,12 @@ public class RoomService {
         Room room = getRoomById(id);
 
         List<Booking> bookings = bookingRepository.findByRoomId(id);
-        for(Booking booking : bookings){
+        for (Booking booking : bookings) {
             bookingRepository.delete(booking);
         }
 
         roomRepository.delete(room);
     }
-
-
 
 
 }

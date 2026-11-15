@@ -8,12 +8,12 @@ import jakarta.persistence.*;
  * Mapped to the "bands" database table.
  */
 @Entity
-@Table(name="bands")
+@Table(name = "bands")
 public class Band {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "name")
