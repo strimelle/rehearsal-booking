@@ -18,4 +18,4 @@ scripts:
           pm.expect(booking._links.cancel).to.equal(undefined);
       });
     language: text/javascript
-order: 4000
+order: 7000

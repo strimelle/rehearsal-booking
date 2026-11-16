@@ -1,0 +1,22 @@
+$kind: http-request
+url: "{{baseUrl}}/bookings/{{bookingId}}"
+method: GET
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status is 200 OK", function () {
+          pm.response.to.have.status(200);
+      });
+
+      const booking = pm.response.json();
+
+      pm.test("Booking is active", function () {
+          pm.expect(booking.status).to.equal("ACTIVE");
+      });
+
+      pm.test("Booking has links to band and room", function () {
+          pm.expect(booking._links.band).to.not.equal(undefined);
+          pm.expect(booking._links.room).to.not.equal(undefined);
+      });
+    language: text/javascript
+order: 2000

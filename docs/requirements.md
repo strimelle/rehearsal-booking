@@ -18,7 +18,7 @@
 | FR-12 | Rezervacijos atšaukimas | Grupės atstovas gali atšaukti rezervaciją ne vėliau kaip 24 val. iki jos pradžios (taisyklė 6). Atšaukta rezervacija gauna būseną CANCELLED, lieka sistemoje istorijai ir nebeužima kambario laiko. Pakartotinai atšaukti tos pačios rezervacijos negalima. | Grupės atstovas | FR-9 | Nėra | 5 | Yra | 1.0 |
 | FR-13 | Kainos apskaičiavimas | Kuriant rezervaciją sistema apskaičiuoja kainą: valandų skaičius × kambario valandos kaina (taisyklė 7). Kaina išsaugoma rezervacijoje. | Sistema | FR-1 | Nėra | 4 | Yra | 1.0 |
 | FR-14 | Laiko persidengimo tikrinimas | Prieš sukuriant rezervaciją sistema tikrina, ar tame kambaryje nėra aktyvios rezervacijos, kurios laikas persidengtų su nauja (taisyklė 3). Jei viena rezervacija baigiasi, o kita prasideda tą pačią minutę, jos nepersidengia. Atšauktos rezervacijos neįskaitomos. | Sistema | FR-1 | Nėra | 5 | Yra| 1.0 |
-
+| FR-15 | Orų prognozė rezervacijai | Grupės atstovas gali pamatyti orų prognozę aktyvios rezervacijos pradžiai Vilniuje: temperatūrą, juntamą temperatūrą, vėją, kritulius ir oro sąlygas lietuviškai. Prognozė gaunama iš viešo Meteo.lt API. Jei prognozės tam laikui dar nėra (rezervacija per toli ateityje), grąžinamas pranešimas, kad prognozė neprieinama. | Grupės atstovas | FR-9 | Nėra | 2 | Yra | 1.1 |
 ## Nefunkciniai reikalavimai
 
 | Nr. | Įvykis / Panaudojimo atvejis | Aprašymas | Šaltinis | Priklausomybė | Konfliktas | Papildoma medžiaga | Istorija |
@@ -34,3 +34,4 @@
 | NFR-9 | Testuojamumas | Kiekviena klasė, turinti logiką, padengta unit testais (JUnit 5, Mockito). Kiekviena vartotojo istorija turi bent vieną automatinį Cucumber end-to-end scenarijų. Visi testai paleidžiami komanda mvn test. | Užduoties aprašas | Nėra | Nėra | Cucumber Java | - |
 | NFR-10 | Kodo kokybė | Kodas vienodai suformatuotas, pavadinimai atitinka Java konvencijas, viešos klasės ir metodai turi JavaDoc komentarus, iš kurių generuojama JavaDoc dokumentacija. Kodas atitinka SOLID principus. | Užduoties aprašas | Nėra | Nėra | Nėra | - |
 | NFR-11 | Versijų kontrolė | Kodas saugomas GitHub. Kiekviena funkcija kuriama atskiroje šakoje ir sujungiama į master per Pull Request. | Užduoties aprašas | Nėra | Nėra | Nėra | - |
+| NFR-12 | Integracija su išoriniu servisu | Orų prognozė gaunama iš viešo Meteo.lt REST API (https://api.meteo.lt/v1) per RestClient. Atsakymai kešuojami atmintyje (Spring Cache), kad tas pats atsakymas nebūtų siunčiamas pakartotinai. Jei Meteo.lt nepasiekiamas, grąžinama klaida 502 Bad Gateway vienodu klaidų formatu (NFR-5). | Sistemos kūrėjas | NFR-5 | Nėra | Meteo.lt API dokumentacija | - |

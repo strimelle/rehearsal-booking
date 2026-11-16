@@ -1,0 +1,23 @@
+$kind: http-request
+url: "{{baseUrl}}/bookings/{{bookingId}}/forecast"
+method: GET
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status is 200 OK", function () {
+          pm.response.to.have.status(200);
+      });
+
+      const forecast = pm.response.json();
+
+      pm.test("Forecast has temperature and condition", function () {
+          pm.expect(forecast.airTemperature).to.be.a("number");
+          pm.expect(forecast.condition).to.be.a("string");
+          pm.expect(forecast.place).to.equal("Vilnius");
+      });
+
+      pm.test("Forecast has a link to the booking", function () {
+          pm.expect(forecast._links.booking).to.not.equal(undefined);
+      });
+    language: text/javascript
+order: 4000

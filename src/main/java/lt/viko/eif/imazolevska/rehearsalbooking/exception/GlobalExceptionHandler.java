@@ -65,6 +65,16 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * Handles errors of external services, such as Meteo.lt: HTTP 502.
+     */
+    @ExceptionHandler(ExternalServiceException.class)
+    public ResponseEntity<ErrorResponse> handleExternalService(ExternalServiceException exception,
+                                                               HttpServletRequest request) {
+        ErrorResponse body = createErrorResponse(HttpStatus.BAD_GATEWAY, exception.getMessage(), request);
+        return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(body);
+    }
+
+    /**
      * Handles validation errors from @Valid: HTTP 400.
      * The message lists every invalid field and the reason.
      */

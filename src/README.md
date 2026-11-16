@@ -76,6 +76,7 @@ Programa pasileidžia adresu `http://localhost:8080`. Paleidžiant Liquibase suk
 | GET | `/bookings/{id}` | Viena rezervacija | 200 |
 | POST | `/bookings` | Nauja rezervacija | 201 |
 | POST | `/bookings/{id}/cancel` | Rezervacijos atšaukimas | 200 |
+| GET | `/bookings/{id}/forecast` | Orų prognozė rezervacijos pradžiai (iš Meteo.lt) | 200 |
 
 Klaidos grąžinamos vienodu formatu:
 
@@ -107,6 +108,10 @@ Content-Type: application/json
 
 Atsakymas `201 Created` su HATEOAS nuorodomis: `self`, `bookings`, `band`, `room` ir `cancel`. Nuoroda `cancel` rodoma tik aktyviai rezervacijai.
 
+## Išorinis servisas: Meteo.lt
+
+Orų prognozė rezervacijai gaunama iš viešo [Meteo.lt API](https://api.meteo.lt). Raktas nereikalingas. Programa kreipiasi į `https://api.meteo.lt/v1/places/vilnius/forecasts/long-term`, parenka prognozę, artimiausią repeticijos pradžiai, ir oro sąlygas išverčia į lietuvių kalbą. Meteo.lt atsakymai kešuojami atmintyje (Spring Cache). Jei Meteo.lt nepasiekiamas, grąžinamas kodas 502.
+
 ## REST principai
 
 - **Richardson 3 lygis (HATEOAS):** kiekviename atsakyme yra nuorodos į susijusius resursus.
@@ -122,8 +127,8 @@ Visi testai paleidžiami viena komanda:
 ```
 
 - **Unit testai** (`../../../Downloads/part13-files/src/test/java`): entity, service, mapper, controller, exception handler ir config klasės.
-- **Cucumber end-to-end testai:** 8 vartotojų istorijos, 30 scenarijų (`src/test/resources/features`). Ataskaita: [docs/cucumber-report.html](docs/cucumber-report.html).
-- **Postman kolekcija:** [docs/collection.json](docs/collection.json). Importuok į Postman ir paleisk visą kolekciją.
+- **Cucumber end-to-end testai:** 8 vartotojų istorijos, 30 scenarijų (`../../../Downloads/meteo-files/src/test/resources/features`). Ataskaita: [docs/cucumber-report.html](docs/cucumber-report.html).
+- **Postman kolekcija:** [docs/collection.json](../../../Downloads/meteo-files/docs/collection.json). Importuok į Postman ir paleisk visą kolekciją.
 
 ## JavaDoc
 
@@ -138,9 +143,9 @@ Dokumentacija sugeneruojama į `target/reports/apidocs/index.html`.
 | Failas | Turinys |
 | --- | --- |
 | [docs/requirements.md](../../../Downloads/part13-files/docs/requirements.md) | Funkciniai ir nefunkciniai reikalavimai |
-| [docs/user-stories.md](docs/user-stories.md) | Vartotojų istorijos su priėmimo kriterijais |
+| [docs/user-stories.md](../../../Downloads/meteo-files/docs/user-stories.md) | Vartotojų istorijos su priėmimo kriterijais |
 | [docs/openapi.yaml](docs/openapi.yaml) | OpenAPI specifikacija |
-| [docs/collection.json](docs/collection.json) | Postman kolekcija |
+| [docs/collection.json](../../../Downloads/meteo-files/docs/collection.json) | Postman kolekcija |
 | [docs/cucumber-report.html](docs/cucumber-report.html) | Cucumber testų ataskaita |
 
 ## Projekto struktūra

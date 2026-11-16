@@ -2,6 +2,7 @@ package lt.viko.eif.imazolevska.rehearsalbooking.mapper;
 
 import lt.viko.eif.imazolevska.rehearsalbooking.controller.BandController;
 import lt.viko.eif.imazolevska.rehearsalbooking.controller.BookingController;
+import lt.viko.eif.imazolevska.rehearsalbooking.controller.ForecastController;
 import lt.viko.eif.imazolevska.rehearsalbooking.controller.RoomController;
 import lt.viko.eif.imazolevska.rehearsalbooking.dto.BookingResponse;
 import lt.viko.eif.imazolevska.rehearsalbooking.entity.Band;
@@ -16,7 +17,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 /**
  * Converts Booking entities to BookingResponse objects and adds HATEOAS links.
- * The "cancel" link is added only to active bookings.
+ * The "cancel" and "forecast" links are added only to active bookings.
  */
 @Component
 public class BookingResponseMapper {
@@ -61,6 +62,11 @@ public class BookingResponseMapper {
             Link cancelLink = linkTo(methodOn(BookingController.class).cancelBooking(booking.getId()))
                     .withRel("cancel");
             response.add(cancelLink);
+
+            // The weather forecast is useful only for a rehearsal that will take place
+            Link forecastLink = linkTo(methodOn(ForecastController.class).getForecast(booking.getId()))
+                    .withRel("forecast");
+            response.add(forecastLink);
         }
 
         return response;
