@@ -1,5 +1,5 @@
 $kind: http-request
-url: "{{baseUrl}}/rooms/{{roomId}}/bookings"
+url: "{{baseUrl}}/bands"
 method: GET
 scripts:
   - type: afterResponse
@@ -8,9 +8,9 @@ scripts:
           pm.response.to.have.status(200);
       });
 
-      pm.test("Room has one active booking", function () {
+      pm.test("List contains bands", function () {
           const body = pm.response.json();
-          pm.expect(body._embedded.bookings.length).to.equal(1);
+          pm.expect(body._embedded.bands.length).to.be.above(0);
       });
     language: text/javascript
-order: 3000
+order: 2000

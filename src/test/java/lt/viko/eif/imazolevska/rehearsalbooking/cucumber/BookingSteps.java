@@ -129,7 +129,7 @@ public class BookingSteps {
         saveBooking(band, room, start, end, price, false);
     }
 
-    // ---------- When ----------
+
 
     @When("grupė {string} rezervuoja kambarį {string} {word} nuo {word} iki {word}")
     public void bandBooksRoom(String bandName, String roomName, String day, String from, String to) {
@@ -174,7 +174,7 @@ public class BookingSteps {
         context.setLastResponse(response);
     }
 
-    // ---------- Then ----------
+
 
     @Then("rezervacija sukuriama su būsena {string}")
     public void bookingIsCreatedWithStatus(String expectedStatus) {

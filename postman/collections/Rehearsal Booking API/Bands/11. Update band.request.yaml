@@ -1,0 +1,26 @@
+$kind: http-request
+url: "{{baseUrl}}/bands/{{bandId}}"
+method: PUT
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Vakaro Aidas",
+      "contactEmail": "aidas@example.com",
+      "membersCount": 5
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status is 200 OK", function () {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Members count is changed to 5", function () {
+          const band = pm.response.json();
+          pm.expect(band.membersCount).to.equal(5);
+      });
+    language: text/javascript
+order: 4000

@@ -16,6 +16,7 @@ public class Hooks {
     private final BookingRepository bookingRepository;
     private final RoomRepository roomRepository;
     private final BandRepository bandRepository;
+    private final FakeWeatherClient fakeWeatherClient;
 
     /**
      * Creates the hooks. Spring passes the port and the repositories automatically.
@@ -24,18 +25,21 @@ public class Hooks {
      * @param bookingRepository the repository for bookings
      * @param roomRepository    the repository for rooms
      * @param bandRepository    the repository for bands
+     * @param fakeWeatherClient the fake weather service
      */
     public Hooks(@Value("${local.server.port}") int port, BookingRepository bookingRepository,
-                 RoomRepository roomRepository, BandRepository bandRepository) {
+                 RoomRepository roomRepository, BandRepository bandRepository,
+                 FakeWeatherClient fakeWeatherClient) {
         this.port = port;
         this.bookingRepository = bookingRepository;
         this.roomRepository = roomRepository;
         this.bandRepository = bandRepository;
+        this.fakeWeatherClient = fakeWeatherClient;
     }
 
     /**
-     * Points REST Assured to the running application and empties the database,
-     * so that every scenario starts from a clean state.
+     * Points REST Assured to the running application, empties the database
+     * and resets the fake weather service, so that every scenario starts from a clean state.
      */
     @Before
     public void prepareScenario() {
@@ -45,5 +49,8 @@ public class Hooks {
         bookingRepository.deleteAll();
         roomRepository.deleteAll();
         bandRepository.deleteAll();
+
+        // The fake weather service starts every scenario without a forecast
+        fakeWeatherClient.reset();
     }
 }

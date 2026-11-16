@@ -55,6 +55,9 @@ public class CommonSteps {
                 "End time must be after start time");
         expectedMessages.put("atšaukti galima ne vėliau kaip prieš 24 valandas", "no later than 24 hours");
         expectedMessages.put("rezervacija jau atšaukta", "Booking is already canceled");
+        expectedMessages.put("orų prognozės šiam laikui dar nėra",
+                "Weather forecast for this booking time is not available");
+        expectedMessages.put("orų tarnyba nepasiekiama", "Weather service is not available");
     }
 
     @Then("gaunamas pranešimas, kad {}")

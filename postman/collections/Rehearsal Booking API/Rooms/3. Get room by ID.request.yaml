@@ -1,0 +1,22 @@
+$kind: http-request
+url: "{{baseUrl}}/rooms/{{roomId}}"
+method: GET
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status is 200 OK", function () {
+          pm.response.to.have.status(200);
+      });
+
+      const room = pm.response.json();
+
+      pm.test("Room has the created name", function () {
+          pm.expect(room.name).to.equal(pm.collectionVariables.get("roomName"));
+      });
+
+      pm.test("Room has HATEOAS links", function () {
+          pm.expect(room._links.self).to.not.equal(undefined);
+          pm.expect(room._links.bookings).to.not.equal(undefined);
+      });
+    language: text/javascript
+order: 3000
